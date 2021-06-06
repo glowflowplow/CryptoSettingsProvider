@@ -1,0 +1,12 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="My" GeneratedClassName="MySettings" UseMySettingsClassName="true">
+  <Profiles />
+  <Settings>
+    <Setting Name="AesKey" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">20C5641526DD0664DDC4FDDDD2AE4388F0B0B51E63C93D90CDC3D9D15C93838B</Value>
+    </Setting>
+    <Setting Name="IVs" Type="Demo.SerializableStringDictionary" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+  </Settings>
+</SettingsFile>
