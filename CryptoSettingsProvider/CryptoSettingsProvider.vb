@@ -68,7 +68,9 @@ Public Class CryptoSettingsProvider
             context As SettingsContext,
             collection As SettingsPropertyValueCollection)
 
+        ' 更新対象コレクション
         Dim NewCollection = New SettingsPropertyValueCollection()
+
         For Each spv As SettingsPropertyValue In collection
             ' String以外は暗号化しない
             If spv.Property.PropertyType <> GetType(String) Then
@@ -82,6 +84,8 @@ Public Class CryptoSettingsProvider
 
             ' 値を暗号化
             spv.PropertyValue = Encrypt(spv.PropertyValue, spv.Name)
+
+            ' 追加
             NewCollection.Add(spv)
         Next
 
@@ -116,6 +120,11 @@ Public Class CryptoSettingsProvider
 
     ' 暗号化
     Private Function Encrypt(Value As String, Name As String) As String
+        ' 初期化ベクトル辞書が存在しない場合はNullを返す
+        If IVDictionary Is Nothing Then
+            Return Nothing
+        End If
+
         Dim DecodedValue As Byte() = Encoding.GetBytes(Value)
         Dim EncryptedValue As Byte() = Cryptor.Encrypt(DecodedValue)
         Dim IV As Byte() = Cryptor.IV
@@ -128,14 +137,14 @@ Public Class CryptoSettingsProvider
 
     ' 復号
     Private Function Decrypt(Value As String, Name As String) As String
-        ' 初期化ベクトル辞書が存在しない場合は例外を投げる
+        ' 初期化ベクトル辞書が存在しない場合はNullを返す
         If IVDictionary Is Nothing Then
-            Throw New InvalidOperationException("IV Dictionary is Nothing")
+            Return Nothing
         End If
 
-        ' 初期化ベクトル辞書に該当するキーが存在しない場合は空文字を返す
+        ' 初期化ベクトル辞書に該当するキーが存在しない場合はNullを返す
         If Not IVDictionary.ContainsKey(Name) Then
-            Return String.Empty
+            Return Nothing
         End If
 
         Dim ByteArray = Unhex(Value)
