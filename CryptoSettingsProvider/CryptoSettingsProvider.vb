@@ -57,13 +57,7 @@ Public Class CryptoSettingsProvider
             End If
 
             ' 値を暗号化
-            Dim Encrypted As Byte() = Encrypt(spv.PropertyValue, spv.Name)
-
-            ' 16進表記に変換
-            Dim Hexed As String = Me.Hex(Encrypted)
-
-            ' 更新
-            spv.PropertyValue = Hexed
+            spv.PropertyValue = Encrypt(spv.PropertyValue, spv.Name)
         Next
 
         ' 設定ファイルに書き込み
@@ -83,32 +77,27 @@ Public Class CryptoSettingsProvider
                 Continue For
             End If
 
-            ' Byte配列に変換
-            Dim ByteArray As Byte() = Unhex(spv.PropertyValue)
-
             ' 復号
-            Dim Decrypted = Decrypt(ByteArray, spv.Name)
-
-            ' 更新
-            spv.PropertyValue = Decrypted
+            spv.PropertyValue = Decrypt(spv.PropertyValue, spv.Name)
         Next
 
         Return SPVCollection
     End Function
 
     ' 暗号化
-    Private Function Encrypt(Value As String, Name As String) As Byte()
+    Private Function Encrypt(Value As String, Name As String) As String
         Dim DecodedValue As Byte() = Encoding.GetBytes(Value)
         Dim EncryptedValue As Byte() = Cryptor.Encrypt(DecodedValue)
         Dim IV As Byte() = Cryptor.IV
         Dim HexStringIV As String = ByteArrayHexStringConverter.ToHexString(IV)
         ' 初期化ベクトルを辞書に追加/上書き
         AddOrOverwirte(IVDictionary, Name, HexStringIV)
-        Return EncryptedValue
+        Dim HexedString = Hex(EncryptedValue)
+        Return HexedString
     End Function
 
     ' 復号
-    Private Function Decrypt(Value As Byte(), Name As String) As String
+    Private Function Decrypt(Value As String, Name As String) As String
         ' 初期化ベクトル辞書が存在しない場合は例外を投げる
         If IVDictionary Is Nothing Then
             Throw New InvalidOperationException("IV Dictionary is Nothing")
@@ -119,9 +108,10 @@ Public Class CryptoSettingsProvider
             Return String.Empty
         End If
 
+        Dim ByteArray = Unhex(Value)
         Dim HexStringIV = IVDictionary(Name)
         Dim IV As Byte() = Unhex(HexStringIV)
-        Dim DecryptedValue = Cryptor.Decrypt(IV, Value)
+        Dim DecryptedValue = Cryptor.Decrypt(IV, ByteArray)
         Dim EncodedValue = Encoding.GetString(DecryptedValue)
         Return EncodedValue
     End Function
@@ -143,5 +133,4 @@ Public Class CryptoSettingsProvider
             Dictionary.Add(Key, Value)
         End If
     End Sub
-
 End Class
