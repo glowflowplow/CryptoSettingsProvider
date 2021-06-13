@@ -1,10 +1,16 @@
 ﻿Imports System.Collections.Specialized
 Imports System.Configuration
+Imports System.Security.Permissions
 Imports System.Text
 
 ''' <summary>
 ''' Aesによる暗号化設定ファイルプロバイダ
 ''' </summary>
+
+<
+    PermissionSet(SecurityAction.LinkDemand, Name:="FullTrust"),
+    PermissionSet(SecurityAction.InheritanceDemand, Name:="FullTrust")
+>
 Public Class CryptoSettingsProvider
     Inherits LocalFileSettingsProvider
 
@@ -33,6 +39,12 @@ Public Class CryptoSettingsProvider
         End Set
     End Property
 
+    ' コンストラクタ
+    Public Sub New()
+        ApplicationName = String.Empty
+        Name = "CryptoSettingsProvider"
+    End Sub
+
     ' 初期化メソッド
     Public Overrides Sub Initialize(
             ByVal pname As String,
@@ -40,7 +52,7 @@ Public Class CryptoSettingsProvider
 
         ' 設定プロバイダ名を指定する
         If (String.IsNullOrEmpty(pname)) Then
-            pname = "CryptSettingProvider"
+            pname = "CryptoSettingsProvider"
         End If
 
         MyBase.Initialize(pname, config)
