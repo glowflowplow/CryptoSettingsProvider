@@ -8,9 +8,6 @@ Imports System.Text
 Public Class CryptoSettingsProvider
     Inherits LocalFileSettingsProvider
 
-    ' プロバイダ名
-    Public Overrides ReadOnly Property Name As String
-
     ' Aes暗号化クラス
     Public ReadOnly Property Cryptor As New Cryptor
 
@@ -76,7 +73,6 @@ Public Class CryptoSettingsProvider
         Dim SPVCollection = MyBase.GetPropertyValues(context, collection)
 
         For Each spv As SettingsPropertyValue In SPVCollection
-
             ' Byte配列に変換
             Dim ByteArray As Byte() = Unhex(spv.PropertyValue)
 
