@@ -30,23 +30,21 @@ Public Class CryptoSettingsProvider
         End Set
     End Property
 
-    ' おまじない
-    Public Sub New()
-        ApplicationName = String.Empty
-        Name = "CryptSettingProvider"
-    End Sub
-
     ' 初期化メソッド
     Public Overrides Sub Initialize(
             ByVal pname As String,
             ByVal config As NameValueCollection)
 
         ' 設定プロバイダ名を指定する
-        MyBase.Initialize(Name, config)
+        If (String.IsNullOrEmpty(pname)) Then
+            pname = "CryptSettingProvider"
+        End If
 
-        ' キーが存在しない場合、キーサイズを指定し、キーを再生成する
+        MyBase.Initialize(pname, config)
+
+        ' キーが存在しない場合、キーを生成する
         If Cryptor.Key Is Nothing Then
-            Cryptor.KeySize = 256
+            Cryptor.GenerateKey(256)
         End If
     End Sub
 
