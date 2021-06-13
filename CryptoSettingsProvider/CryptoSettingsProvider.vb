@@ -2,11 +2,16 @@
 Imports System.Configuration
 Imports System.Text
 
+''' <summary>
+''' Aesによる暗号化設定ファイルプロバイダ
+''' </summary>
 Public Class CryptoSettingsProvider
     Inherits LocalFileSettingsProvider
 
+    ' アプリ名
     Public Overrides Property ApplicationName As String
 
+    ' プロバイダ名
     Public Overrides ReadOnly Property Name As String
 
     ' Aes暗号化クラス
@@ -28,6 +33,7 @@ Public Class CryptoSettingsProvider
         End Set
     End Property
 
+    ' おまじない
     Public Sub New()
         ApplicationName = String.Empty
         Name = "CryptSettingProvider"
@@ -41,7 +47,7 @@ Public Class CryptoSettingsProvider
         ' 設定プロバイダ名を指定する
         MyBase.Initialize(Name, config)
 
-        ' Keyの設定
+        ' キーが存在しない場合、キーサイズを指定し、キーを再生成する
         If Cryptor.Key Is Nothing Then
             Cryptor.KeySize = 256
         End If
