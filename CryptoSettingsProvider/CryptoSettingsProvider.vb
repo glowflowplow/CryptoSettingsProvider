@@ -50,18 +50,25 @@ Public Class CryptoSettingsProvider
             context As SettingsContext,
             collection As SettingsPropertyValueCollection)
 
+        Dim NewCollection = New SettingsPropertyValueCollection()
         For Each spv As SettingsPropertyValue In collection
             ' String以外は暗号化しない
             If spv.Property.PropertyType <> GetType(String) Then
                 Continue For
             End If
 
+            ' 値がNullの場合は更新対象に含めない
+            If spv.PropertyValue Is Nothing Then
+                Continue For
+            End If
+
             ' 値を暗号化
             spv.PropertyValue = Encrypt(spv.PropertyValue, spv.Name)
+            NewCollection.Add(spv)
         Next
 
         ' 設定ファイルに書き込み
-        MyBase.SetPropertyValues(context, collection)
+        MyBase.SetPropertyValues(context, NewCollection)
     End Sub
 
     ' プロパティの取得
@@ -78,7 +85,12 @@ Public Class CryptoSettingsProvider
             End If
 
             ' 復号
-            spv.PropertyValue = Decrypt(spv.PropertyValue, spv.Name)
+            ' 失敗した場合はNullを取得
+            Try
+                spv.PropertyValue = Decrypt(spv.PropertyValue, spv.Name)
+            Catch ex As Exception
+                spv.PropertyValue = Nothing
+            End Try
         Next
 
         Return SPVCollection
