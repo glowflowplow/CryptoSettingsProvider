@@ -17,7 +17,7 @@ Public Class Cryptor
         End Get
         Set(Key As Byte())
             ' KeySize setter could throw exception
-            Provider.KeySize = Key.Length
+            Provider.KeySize = Key.Length * 8
             Provider.Key = Key
         End Set
     End Property
