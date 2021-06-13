@@ -51,6 +51,11 @@ Public Class CryptoSettingsProvider
             collection As SettingsPropertyValueCollection)
 
         For Each spv As SettingsPropertyValue In collection
+            ' String以外は暗号化しない
+            If spv.Property.PropertyType <> GetType(String) Then
+                Continue For
+            End If
+
             ' 値を暗号化
             Dim Encrypted As Byte() = Encrypt(spv.PropertyValue, spv.Name)
 
@@ -73,6 +78,11 @@ Public Class CryptoSettingsProvider
         Dim SPVCollection = MyBase.GetPropertyValues(context, collection)
 
         For Each spv As SettingsPropertyValue In SPVCollection
+            ' String以外は復号しない
+            If spv.Property.PropertyType <> GetType(String) Then
+                Continue For
+            End If
+
             ' Byte配列に変換
             Dim ByteArray As Byte() = Unhex(spv.PropertyValue)
 
