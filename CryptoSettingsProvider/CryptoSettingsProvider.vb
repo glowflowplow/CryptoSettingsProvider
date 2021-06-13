@@ -8,6 +8,12 @@ Imports System.Text
 Public Class CryptoSettingsProvider
     Inherits LocalFileSettingsProvider
 
+    ' アプリ名
+    Public Overrides Property ApplicationName As String
+
+    ' プロバイダ名
+    Public Overrides ReadOnly Property Name As String
+
     ' Aes暗号化クラス
     Public ReadOnly Property Cryptor As New Cryptor
 
