@@ -1,14 +1,14 @@
 ﻿Imports System.Security.Cryptography
 
+' Lap AesCryptoSevrviceProvider
 Public Class Cryptor
     Private ReadOnly Provider As New AesCryptoServiceProvider
 
     Public Sub New()
-        Provider.GenerateKey()
     End Sub
 
     Public Sub New(ByVal Key As Byte())
-        Provider.Key = Key
+        Me.Key = Key
     End Sub
 
     Public Property Key As Byte()
@@ -16,17 +16,9 @@ Public Class Cryptor
             Return Provider.Key
         End Get
         Set(Key As Byte())
+            ' KeySize setter could throw exception
+            Provider.KeySize = Key.Length
             Provider.Key = Key
-        End Set
-    End Property
-
-    Public Property KeySize As Integer
-        Get
-            Return Provider.KeySize
-        End Get
-        Set(KeySize As Integer)
-            Provider.KeySize = KeySize
-            Provider.GenerateKey()
         End Set
     End Property
 
@@ -35,6 +27,15 @@ Public Class Cryptor
             Return Provider.IV
         End Get
     End Property
+
+    Public Sub GenerateKey()
+        Provider.GenerateKey()
+    End Sub
+
+    Public Sub GenerateKey(ByVal KeySize)
+        Provider.KeySize = KeySize
+        Provider.GenerateKey()
+    End Sub
 
     Public Function Encrypt(ByVal Value As Byte()) As Byte()
         Provider.GenerateIV()
