@@ -2,13 +2,13 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="" GeneratedClassName="CryptoSettings">
   <Profiles />
   <Settings>
-    <Setting Name="SettingA" Type="System.String" Scope="User">
+    <Setting Name="SettingA" Provider="CryptoSettingsProvider.CryptoSettingsProvider" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="SettingB" Type="System.String" Scope="User">
+    <Setting Name="SettingB" Provider="CryptoSettingsProvider.CryptoSettingsProvider" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="SettingC" Type="System.String" Scope="User">
+    <Setting Name="SettingC" Provider="CryptoSettingsProvider.CryptoSettingsProvider" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>

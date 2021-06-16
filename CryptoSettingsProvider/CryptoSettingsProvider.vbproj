@@ -65,7 +65,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ByteArrayHexStringConverter.vb" />
+    <Compile Include="HexConverter.vb" />
     <Compile Include="Cryptor.vb" />
     <Compile Include="CryptoSettingsProvider.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
