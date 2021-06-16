@@ -1,6 +1,9 @@
 ﻿Imports System.Security.Cryptography
 
-' Lap AesCryptoSevrviceProvider
+<Assembly: Runtime.CompilerServices.InternalsVisibleTo("Tests")>
+''' <summary>
+''' AesCryptoServiceProviderをラップする
+''' </summary>
 Public Class Cryptor
     Private ReadOnly Provider As New AesCryptoServiceProvider
 

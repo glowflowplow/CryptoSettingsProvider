@@ -1,5 +1,8 @@
-﻿Public Class ByteArrayHexStringConverter
-
+﻿<Assembly: Runtime.CompilerServices.InternalsVisibleTo("Tests")>
+''' <summary>
+''' 16進表記の文字列とByte型配列の変換をする
+''' </summary>
+Friend Class HexConverter
     ''' <summary>
     ''' 16進文字列からByte型配列へ変換する
     ''' </summary>

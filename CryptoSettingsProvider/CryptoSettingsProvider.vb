@@ -14,38 +14,63 @@ Imports System.Text
 Public Class CryptoSettingsProvider
     Inherits LocalFileSettingsProvider
 
-    ' アプリ名
+    ''' <summary>
+    ''' アプリ名を取得または設定します
+    ''' </summary>
+    ''' <returns>アプリ名</returns>
     Public Overrides Property ApplicationName As String
 
-    ' プロバイダ名
+    ''' <summary>
+    ''' プロバイダ名を取得します
+    ''' </summary>
+    ''' <returns>プロバイダ名</returns>
     Public Overrides ReadOnly Property Name As String
 
-    ' Aes暗号化クラス
-    Public ReadOnly Property Cryptor As New Cryptor
+    ''' <summary>
+    ''' 暗号化するためのクラスを取得します
+    ''' </summary>
+    ''' <returns>暗号化するためのクラス</returns>
+    Private ReadOnly Property Cryptor As New Cryptor
 
-    ' 初期化ベクトルをプロパティ名をキーに辞書に格納する
+    ''' <summary>
+    ''' 初期化ベクトルを保持する辞書を取得または設定します
+    ''' プロパティ名がキー、初期化ベクトルが値に対応します
+    ''' </summary>
+    ''' <returns>初期化ベクトルを持つ辞書</returns>
     Public Property IVDictionary As StringDictionary
 
-    ' バイト配列と文字列の変換に使用する
+    ''' <summary>
+    ''' 暗号化する際の文字コードを取得または設定します
+    ''' </summary>
+    ''' <returns>文字コード</returns>
     Public Property Encoding As Encoding = Encoding.UTF8
 
-    ' 16進表記のキー
-    Public Property HexedKey As String
+    ''' <summary>
+    ''' キーを16進表記で取得または設定します
+    ''' </summary>
+    ''' <returns>文字列</returns>
+    Public Property HexadecimalKey As String
         Get
-            Return Hex(Cryptor.Key)
+            Return HexConverter.ToHexString(Cryptor.Key)
         End Get
         Set(HexedKey As String)
-            Cryptor.Key = Unhex(HexedKey)
+            Cryptor.Key = HexConverter.ToByteArray(HexedKey)
         End Set
     End Property
 
-    ' コンストラクタ
+    ''' <summary>
+    ''' Constructor
+    ''' </summary>
     Public Sub New()
         ApplicationName = String.Empty
         Name = "CryptoSettingsProvider"
     End Sub
 
-    ' 初期化メソッド
+    ''' <summary>
+    ''' 初期化メソッド
+    ''' </summary>
+    ''' <param name="pname">プロバイダ名</param>
+    ''' <param name="config">設定</param>
     Public Overrides Sub Initialize(
             ByVal pname As String,
             ByVal config As NameValueCollection)
@@ -63,7 +88,7 @@ Public Class CryptoSettingsProvider
         End If
     End Sub
 
-    ' プロパティの設定
+    ''' <inheritdoc/>
     Public Overrides Sub SetPropertyValues(
             context As SettingsContext,
             collection As SettingsPropertyValueCollection)
@@ -93,7 +118,7 @@ Public Class CryptoSettingsProvider
         MyBase.SetPropertyValues(context, NewCollection)
     End Sub
 
-    ' プロパティの取得
+    ''' <inheritdoc/>
     Public Overrides Function GetPropertyValues(
             context As SettingsContext,
             collection As SettingsPropertyCollection) As SettingsPropertyValueCollection
@@ -118,7 +143,12 @@ Public Class CryptoSettingsProvider
         Return SPVCollection
     End Function
 
-    ' 暗号化
+    ''' <summary>
+    ''' 値を暗号化し、辞書に初期化ベクトルを登録または更新する
+    ''' </summary>
+    ''' <param name="Value">値</param>
+    ''' <param name="Name">プロパティ名</param>
+    ''' <returns>暗号化された値</returns>
     Private Function Encrypt(Value As String, Name As String) As String
         ' 初期化ベクトル辞書が存在しない場合はNullを返す
         If IVDictionary Is Nothing Then
@@ -128,14 +158,20 @@ Public Class CryptoSettingsProvider
         Dim DecodedValue As Byte() = Encoding.GetBytes(Value)
         Dim EncryptedValue As Byte() = Cryptor.Encrypt(DecodedValue)
         Dim IV As Byte() = Cryptor.IV
-        Dim HexStringIV As String = ByteArrayHexStringConverter.ToHexString(IV)
+        Dim HexStringIV As String = HexConverter.ToHexString(IV)
         ' 初期化ベクトルを辞書に追加/上書き
         AddOrOverwirte(IVDictionary, Name, HexStringIV)
-        Dim HexedString = Hex(EncryptedValue)
+        Dim HexedString = HexConverter.ToHexString(EncryptedValue)
         Return HexedString
     End Function
 
-    ' 復号
+    ''' <summary>
+    ''' 値を復号する
+    ''' 復号するためには辞書に正確な初期化ベクトルが保持されている必要がある
+    ''' </summary>
+    ''' <param name="Value">値</param>
+    ''' <param name="Name">プロパティ名</param>
+    ''' <returns>復号された値</returns>
     Private Function Decrypt(Value As String, Name As String) As String
         ' 初期化ベクトル辞書が存在しない場合はNullを返す
         If IVDictionary Is Nothing Then
@@ -147,24 +183,20 @@ Public Class CryptoSettingsProvider
             Return Nothing
         End If
 
-        Dim ByteArray = Unhex(Value)
+        Dim ByteArray = HexConverter.ToByteArray(Value)
         Dim HexStringIV = IVDictionary(Name)
-        Dim IV As Byte() = Unhex(HexStringIV)
+        Dim IV As Byte() = HexConverter.ToByteArray(HexStringIV)
         Dim DecryptedValue = Cryptor.Decrypt(IV, ByteArray)
         Dim EncodedValue = Encoding.GetString(DecryptedValue)
         Return EncodedValue
     End Function
 
-    ' 16進表記からバイト配列へ変換する
-    Private Function Unhex(Hexed As String) As Byte()
-        Return ByteArrayHexStringConverter.ToByteArray(Hexed)
-    End Function
-
-    ' バイト配列から16進表記に変換する
-    Private Function Hex(ByteArray As Byte()) As String
-        Return ByteArrayHexStringConverter.ToHexString(ByteArray)
-    End Function
-
+    ''' <summary>
+    ''' 辞書に値を登録する。既に値が存在する場合は更新する。
+    ''' </summary>
+    ''' <param name="Dictionary"></param>
+    ''' <param name="Key"></param>
+    ''' <param name="Value"></param>
     Private Sub AddOrOverwirte(ByRef Dictionary As StringDictionary, ByVal Key As String, ByVal Value As String)
         If Dictionary.ContainsKey(Key) Then
             Dictionary(Key) = Value

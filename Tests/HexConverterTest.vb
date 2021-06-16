@@ -19,7 +19,7 @@ Public Class HexConverterTest
     Public Sub ToHexString_FromCommonByteArray()
         Dim Arr As Byte() = {0, 1, 2, 4, 8, 16, 32, 64, 128, 255}
         Dim Excepted = "000102040810204080FF"
-        Dim Result = ByteArrayHexStringConverter.ToHexString(Arr)
+        Dim Result = HexConverter.ToHexString(Arr)
         Assert.AreEqual(Excepted, Result)
     End Sub
 
@@ -27,7 +27,7 @@ Public Class HexConverterTest
     <TestMethod>
     Public Sub ToHexString_FromNullByteArray_ThrownException()
         Dim Arr As Byte() = Nothing
-        Dim Action As Func(Of Object) = Function() ByteArrayHexStringConverter.ToHexString(Arr)
+        Dim Action As Func(Of Object) = Function() HexConverter.ToHexString(Arr)
         Dim Message = "Method should have Thrown ArgumentNullException"
         Assert.ThrowsException(Of ArgumentNullException)(Action, Message)
     End Sub
@@ -36,7 +36,7 @@ Public Class HexConverterTest
     <TestMethod>
     Public Sub ToHexString_FromEmptyByteArray_ReturnedEmptyString()
         Dim Arr As Byte() = Array.Empty(Of Byte)
-        Dim Result = ByteArrayHexStringConverter.ToHexString(Arr)
+        Dim Result = HexConverter.ToHexString(Arr)
         Dim Excepted = String.Empty
         Dim Message = "Method should have returned Empty String"
         Assert.AreEqual(Excepted, Result, Message)
@@ -46,7 +46,7 @@ Public Class HexConverterTest
     <TestMethod>
     Public Sub ToHexString_FromSingleArray()
         Dim Arr As Byte() = {23}
-        Dim Result = ByteArrayHexStringConverter.ToHexString(Arr)
+        Dim Result = HexConverter.ToHexString(Arr)
         Assert.AreEqual("17", Result, "Method could not have returned correctlly value by single element array")
     End Sub
 
@@ -71,7 +71,7 @@ Public Class HexConverterTest
             224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239,
             240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255
         }
-        Dim Hex = ByteArrayHexStringConverter.ToHexString(Arr)
+        Dim Hex = HexConverter.ToHexString(Arr)
         Dim Str =
             "000102030405060708090A0B0C0D0E0F" &
             "101112131415161718191A1B1C1D1E1F" &
@@ -97,7 +97,7 @@ Public Class HexConverterTest
     Public Sub ToByteArray_FromCommonHexString()
         Dim Hex As String = "1111"
         Dim ExceptedArray As Byte() = {17, 17}
-        Dim Result As Byte() = ByteArrayHexStringConverter.ToByteArray(Hex)
+        Dim Result As Byte() = HexConverter.ToByteArray(Hex)
         CollectionAssert.AreEqual(ExceptedArray, Result)
     End Sub
 
@@ -105,7 +105,7 @@ Public Class HexConverterTest
     <TestMethod>
     Public Sub ToByteArray_FromNullString_ThrownException()
         Dim Hex As String = Nothing
-        Dim Action As Action = Sub() ByteArrayHexStringConverter.ToByteArray(Hex)
+        Dim Action As Action = Sub() HexConverter.ToByteArray(Hex)
         Assert.ThrowsException(Of ArgumentNullException)(Action, "Method should have thrown ArgumentNullException")
     End Sub
 
@@ -114,7 +114,7 @@ Public Class HexConverterTest
     Public Sub ToByteArray_FromEmptyString_ReturnedEmptyString()
         Dim Hex As String = String.Empty
         Dim ExceptedArray As Byte() = Array.Empty(Of Byte)
-        Dim Result As Byte() = ByteArrayHexStringConverter.ToByteArray(Hex)
+        Dim Result As Byte() = HexConverter.ToByteArray(Hex)
         CollectionAssert.AreEqual(ExceptedArray, Result, "Method should have returned empty byte array")
     End Sub
 
@@ -122,7 +122,7 @@ Public Class HexConverterTest
     <TestMethod>
     Public Sub ToByteArray_FromOddLengthString_ThrownException()
         Dim Hex As String = "AAA"
-        Dim Action As Action = Sub() ByteArrayHexStringConverter.ToByteArray(Hex)
+        Dim Action As Action = Sub() HexConverter.ToByteArray(Hex)
         Assert.ThrowsException(Of ArgumentException)(Action, "Method should have thrown ArgumentException")
     End Sub
 
@@ -131,7 +131,7 @@ Public Class HexConverterTest
     Public Sub ToByteArray_FromSingleElementArray()
         Dim Hex As String = "0A"
         Dim ExceptedArray As Byte() = {10}
-        Dim Result As Byte() = ByteArrayHexStringConverter.ToByteArray(Hex)
+        Dim Result As Byte() = HexConverter.ToByteArray(Hex)
         CollectionAssert.AreEqual(ExceptedArray, Result)
     End Sub
 
@@ -173,7 +173,7 @@ Public Class HexConverterTest
             224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239,
             240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255
         }
-        Dim Result = ByteArrayHexStringConverter.ToByteArray(Hex)
+        Dim Result = HexConverter.ToByteArray(Hex)
         CollectionAssert.AreEqual(ExceptedArray, Result)
     End Sub
 
@@ -181,8 +181,8 @@ Public Class HexConverterTest
     <TestMethod>
     Public Sub ToHexStringToByteArray()
         Dim ByteArray As Byte() = {10, 100, 50, 23}
-        Dim Hexed = ByteArrayHexStringConverter.ToHexString(ByteArray)
-        Dim Reversed = ByteArrayHexStringConverter.ToByteArray(Hexed)
+        Dim Hexed = HexConverter.ToHexString(ByteArray)
+        Dim Reversed = HexConverter.ToByteArray(Hexed)
         CollectionAssert.AreEqual(ByteArray, Reversed)
     End Sub
 
@@ -190,8 +190,8 @@ Public Class HexConverterTest
     <TestMethod>
     Public Sub ToByteArrayToHexString()
         Dim HexString = "000011AB35"
-        Dim ByteArray = ByteArrayHexStringConverter.ToByteArray(HexString)
-        Dim Reversed = ByteArrayHexStringConverter.ToHexString(ByteArray)
+        Dim ByteArray = HexConverter.ToByteArray(HexString)
+        Dim Reversed = HexConverter.ToHexString(ByteArray)
         Assert.AreEqual(HexString, Reversed)
     End Sub
 End Class
