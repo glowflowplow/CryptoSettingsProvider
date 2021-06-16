@@ -14,7 +14,7 @@ Option Explicit On
 
 
 <Global.System.Runtime.CompilerServices.CompilerGeneratedAttribute(),  _
- Global.System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.8.1.0")>  _
+ Global.System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.10.0.0")>  _
 Partial Friend NotInheritable Class CryptoSettings
     Inherits Global.System.Configuration.ApplicationSettingsBase
     
@@ -27,6 +27,7 @@ Partial Friend NotInheritable Class CryptoSettings
     End Property
     
     <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Configuration.SettingsProviderAttribute(GetType(CryptoSettingsProvider.CryptoSettingsProvider)),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
      Global.System.Configuration.DefaultSettingValueAttribute("")>  _
     Public Property SettingA() As String
@@ -39,6 +40,7 @@ Partial Friend NotInheritable Class CryptoSettings
     End Property
     
     <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Configuration.SettingsProviderAttribute(GetType(CryptoSettingsProvider.CryptoSettingsProvider)),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
      Global.System.Configuration.DefaultSettingValueAttribute("")>  _
     Public Property SettingB() As String
@@ -51,6 +53,7 @@ Partial Friend NotInheritable Class CryptoSettings
     End Property
     
     <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Configuration.SettingsProviderAttribute(GetType(CryptoSettingsProvider.CryptoSettingsProvider)),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
      Global.System.Configuration.DefaultSettingValueAttribute("")>  _
     Public Property SettingC() As String

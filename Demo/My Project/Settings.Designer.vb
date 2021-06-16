@@ -55,6 +55,7 @@ Namespace My
         End Property
         
         <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+         Global.System.Configuration.SettingsProviderAttribute(GetType(System.Configuration.LocalFileSettingsProvider)),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("20C5641526DD0664DDC4FDDDD2AE4388F0B0B51E63C93D90CDC3D9D15C93838B")>  _
         Public ReadOnly Property AesKey() As String
@@ -64,6 +65,7 @@ Namespace My
         End Property
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Configuration.SettingsProviderAttribute(GetType(System.Configuration.LocalFileSettingsProvider)),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute()>  _
         Public Property IVs() As Global.Demo.SerializableStringDictionary
             Get
