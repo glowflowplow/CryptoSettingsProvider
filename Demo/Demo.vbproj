@@ -94,7 +94,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>CryptoSettings.settings</DependentUpon>
     </Compile>
-    <Compile Include="CryptoSettings.vb" />
     <Compile Include="Form1.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -114,8 +113,8 @@
     </Compile>
     <Compile Include="My Project\Settings.Designer.vb">
       <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="SerializableStringDictionary.vb" />
   </ItemGroup>
