@@ -1,6 +1,7 @@
 ﻿Public Class Form1
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Dim Provider As CryptoSettingsProvider.CryptoSettingsProvider = CryptoSettings.Default.Providers("CryptoSettingsProvider")
+        If My.Settings.IVs Is Nothing Then My.Settings.IVs = New SerializableStringDictionary()
         Provider.IVDictionary = My.Settings.IVs
         Provider.HexadecimalKey = My.Settings.AesKey
         CryptoSettings.Default.Reload()
